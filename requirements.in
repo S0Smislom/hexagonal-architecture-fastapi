@@ -1,0 +1,6 @@
+fastapi
+sqlalchemy[asyncio]
+pydantic-settings
+alembic
+aiosqlite
+uvicorn
