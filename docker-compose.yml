@@ -1,0 +1,45 @@
+services:
+
+  example-db:
+    container_name: example-db
+    image: postgres:16-alpine
+    restart: on-failure
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: example
+      POSTGRES_USER: custom
+      POSTGRES_PASSWORD: qpwoeiruty
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+      - ./db_dump:/db_dump
+    command: ["postgres", "-c", "log_statement=all"]
+    networks:
+      - example-net
+
+  example-api:
+    container_name: example-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: on-failure
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./app:/code/app/
+    # env_file:
+    #   - ./env/.env.docker
+    environment:
+      DB_URL: "postgresql+asyncpg://custom:qpwoeiruty@example-db:5432/example"
+      WATCHFILES_FORCE_POLLING: true
+      DEBUG: true
+    depends_on:
+      - example-db
+    command: uvicorn api.app:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - example-net
+
+networks:
+  example-net:
+    external: true
+    driver: bridge

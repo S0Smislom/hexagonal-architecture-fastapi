@@ -11,6 +11,7 @@ def get_db_url() -> str:
 
     url = config.DB_URL
     url = url.replace("+aiosqlite", "")
+    url = url.replace("+asyncpg", "")
     return url
 
 
