@@ -7,6 +7,7 @@ With docker installed, run the following:
 ```
     $ git clone git@github.com:S0Smislom/hexagonal-architecture-fastapi.git
     $ cd hexagonal-architecture-fastapi
+    $ docker network create example-net
     $ docker compose up
 ```
 
