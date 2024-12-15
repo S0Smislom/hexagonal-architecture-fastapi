@@ -42,7 +42,7 @@ class PlotService(IPlotService):
     async def create(self, data: PlotCreate, equipment_ids: List[int] = None) -> Plot:
         await self._check_factory(data.factory_id)
         item = await self.plot_repository.create(data)
-        await self._add_equpment(item, equipment_ids)
+        await self._add_equipment(item, equipment_ids)
         await self._fetch([item])
         return item
 
@@ -63,9 +63,9 @@ class PlotService(IPlotService):
         if ids is None:
             return
         await self.plot_equipment_repository.remove_equipment(plot.id)
-        await self._add_equpment(plot, ids)
+        await self._add_equipment(plot, ids)
 
-    async def _add_equpment(self, plot: Plot, ids: List[int]):
+    async def _add_equipment(self, plot: Plot, ids: List[int]):
         if not ids:
             return
         equipment = await self.equipment_repository.get_list(
